@@ -22,4 +22,5 @@ Variant Call Format data visualization
 
 RNA-Seq data visualizations
 --------------------------
-- Two different visualization accept *.tsv, *.diff, *.tabular files.
+- Two different visualizations (line chart, donut + fucus chart).
+- *.tsv, *.diff, and *.tabular file types are accepted.
