@@ -10,7 +10,7 @@ Google Genomics browser
 PhyloXML trees
 ----------------
 - The dedicate python server allows the user to upload own phyloXML file.
-- Three different visualizations, Radial tree, Indented tree, Sunburst
+- Three different visualizations, Radial tree, Indented tree, and Sunburst
 
 ChIP-Seq data visualization
 ---------------------------
