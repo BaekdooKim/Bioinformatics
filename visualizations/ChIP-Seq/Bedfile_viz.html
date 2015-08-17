@@ -49,14 +49,29 @@
     width: 80%;
   }
 
+  div.tooltip2 {   
+    position: absolute;           
+    text-align: center;       
+    padding: 0.5rem 0.5rem 0rem 0.5rem;    
+    width: auto;                  
+    height: auto;                 
+    font: 13px sans-serif;
+    color: white;        
+    background: steelblue;   
+    border: 0px;      
+    border-radius: 8px;           
+    pointer-events: none;
+    overflow-y: hidden;
+    -moz-border-radius: 0.375rem;
+    -webkit-border-radius: 0.375rem;
+    border-radius: 0.375rem;
+     
+  }
+
   </style>
 </head>
 <body>
 
-<div>
-<span id="chr_label"> Chromosome:&emsp;</span>
-<select class="chr_control" id="chr_selector"> </select>
-<button class="btn btn-primary btn-xs" id="all_chr">All chromosomes</button>
 <span id="googledrive_chooser">
   <a href="#" class=" googledrive-dropin-btn googledrive-dropin-default">
   <span class="GD-dropin-btn-status"></span>Choose from Google Drive</a>
@@ -68,6 +83,11 @@
   </a>
   <input id="selectfile_local" type="file" accept=".bed" style="display:none;" />
 </span> 
+<div>
+<span id="chr_label"> Chromosome:&emsp;</span>
+<select class="chr_control" id="chr_selector"> </select>
+<button class="btn btn-primary btn-xs" id="all_chr">All chromosomes</button>
+
 </div>
 
 
@@ -75,6 +95,7 @@
   <span> Number of Bins:&emsp;</span>
   <input type="text" id="bin_num" name="peakNumber" ng-model="binNumber" ng:validate="integer:0" value="10" disabled="true"/>&emsp;&emsp;
   <button class="btn btn-info btn-sm" id="update_btn" disabled="true"> update </button>
+  <button class="btn btn-success btn-sm" id="download_btn">Download SVG</button>
 </div>
 <!--
 <form>
@@ -85,7 +106,8 @@
 <button type="submit" id="pos_submit" class="pos_input" disabled="true">submit</button>
 </form>
 -->
-<div id="linechart" style="padding-bottom: 5px"></div>
+
+<div > <svg id="linechart"></svg></div>
 <div class="col-md-5">
   <div id="UCSClink"></div>
 </div>
@@ -94,6 +116,7 @@
 </div>
 <span id="position_table">
 </span>
+<svg id="empty" style="display:none"></svg>
 
 <script>
   // set start and end position gap limit of user input
@@ -167,7 +190,20 @@
     }
   })
 
+  $("#download_btn").on("click", function() {
+      var e = document.createElement('script'); 
+      e.setAttribute('src', 'js/svg-crowbar-1.js'); 
+      e.setAttribute('class', 'svg-crowbar'); 
+      document.body.appendChild(e);
+    })
+
   $(document).ready(function() {
+
+    window.tooltip_div = d3.select("body").append("div")   
+    .attr("class", "tooltip2")               
+    .style("opacity", 0);
+
+
     var button = Dropbox.createChooseButton(options);
     document.getElementById("dropbox_chooser").appendChild(button)
 
@@ -466,7 +502,7 @@
               else { prev_pos = item_list[i-1]; }
             }
           }
-          return "<p>count: "+d.y+"<br/>position: "+prev_pos+" - "+ curr_pos + "<p>";
+          return "<p><b>count: </b>"+d.y+"<br/><b>position: </b>"+prev_pos+" - "+ curr_pos + "<p>";
         }
       });
       linechart.show();
@@ -494,7 +530,7 @@
     xAxisName: "Chromosome",
     yAxisName: "Count",
     xTickFormat: function(d) { return 'chr' + d },
-    tooltipText: function(d, element) { return "<p>name: "+d.name+"<br />count: "+d.y+"<p>"; }
+    tooltipText: function(d, element) { return "<p><b>Name: </b>"+d.name+"<br /><b>Count: </b>"+d.y+"<p>"; }
     });
     
     linechart.show();

@@ -67,19 +67,23 @@
       <input id="selectfile_local" type="file" accept=".tsv, .tabular, .diff" style="display:none;" />
     </span>
   </section>
+  <g class="download_wrapper">
+  <span> Export visualization:&emsp;&emsp;&emsp;&emsp; </span>
+  <button class="ui-btn" id="download_btn">Download SVG</button>
+  </g>
 
   <div id="pieChart"> <svg id="pieChart_svg"></svg> </div>
   <div id="p_value_wrapper" ng-app="p_value_input_app" ng-controller="p_value_ctrl">
     <span> p-value:&emsp;</span>
     <input type="text" id="p_value_input" name="peakNumber" ng-model="binNumber" ng:validate="number" value="5e-05"/>&emsp;&emsp;
-    <button class="btn btn-info btn-sm" id="update_btn"> update </button>
+    <button class="ui-btn" id="update_btn"> update </button>
   </div>
   <div id="controller"></div>
   <div id="filter_info"></div>
   <span id="chr_label"></span>
   
 
-  <svg id="multiBarChart"></svg>
+  <!--<svg id="multiBarChart"></svg>-->
   <div id="focusChart" class='with-3d-shadow with-transitions'>
     <svg id="focusChart_svg"></svg>
   </div>
@@ -113,6 +117,13 @@
       if (event.keyCode == 13){
         $("#update_btn").click();
       }
+    })
+
+    $("#download_btn").on("click", function() {
+      var e = document.createElement('script'); 
+      e.setAttribute('src', 'js/svg-crowbar-1.js'); 
+      e.setAttribute('class', 'svg-crowbar'); 
+      document.body.appendChild(e);
     })
 
     $("#selectfile_local").change(function(e) {
@@ -153,6 +164,22 @@
       $("#focusChart_svg").empty();
       $("#controller").append("<li id=\'datatype\'> The data is uploaded from <b>" + data_origin +"</b></li>");
       $("#controller").append("<li id=\'upfilename\'> File name: <b>" + uploaded_file +"</b></li>")
+
+      /////////////////////////////////////////////////////////
+      // 1. Inputdata format checking
+      // 2. Add standard header if the header is not standard
+      /////////////////////////////////////////////////////////
+      var h = userdata.substr(0,userdata.indexOf('\n'));
+      var header_str = "test_id\tgene_id\tgene\tlocus\tsample_1\tsample_2\tstatus\tvalue_1\tvalue_2\tlog2(fold_change)\ttest_stat\tp_value\tq_value\tsignificant\n";
+      var header = h.split('\t');
+      if (h[0] !== 'test_id' || h[1] !== 'gene_id' || h[2] !== 'gene') {
+        var chk_chr = '';
+        userdata = userdata.replace(h,'');
+        userdata = userdata.trim();
+        userdata = header_str + userdata;
+      }
+      /////////////////////////////////////////////////
+      //// parse the data
       var data = d3.tsv.parse(userdata);
       test.data_raw = "";
       test.data_raw = data;

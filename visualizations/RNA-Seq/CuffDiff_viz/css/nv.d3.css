@@ -156,10 +156,11 @@ svg.nvd3-svg {
   pointer-events: none;
 }
 
+/*
 .nvd3 text {
   font: normal 12px Arial;
 }
-
+*/
 .nvd3 .title {
  font: bold 14px Arial;
 }

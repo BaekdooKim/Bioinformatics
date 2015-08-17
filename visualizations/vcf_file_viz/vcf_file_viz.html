@@ -51,10 +51,6 @@
 <!--
   <p style="text-align: right; margin-right: 5%"><b> === *.vcf visualization === </b></p>
 -->
-<div>
-<span id="chr_label"> Chromosome:&emsp;</span>
-<select class="chr_control" id="chr_selector"> </select>
-<button class="btn btn-primary btn-xs" id="all_chr">All chromosomes</button>
 <span id="googledrive_chooser">
   <a href="#" class=" googledrive-dropin-btn googledrive-dropin-default">
   <span class="GD-dropin-btn-status"></span>Choose from Google Drive</a>
@@ -66,16 +62,22 @@
   </a>
   <input id="selectfile_local" type="file" accept=".vcf" style="display:none;" />
 </span> 
+<div>
+<span id="chr_label"> Chromosome:&emsp;</span>
+<select class="chr_control" id="chr_selector"> </select>
+<button class="btn btn-primary btn-xs" id="all_chr">All chromosomes</button>
+
 </div>
 
 <div ng-app="bin_num_input_app" ng-controller="bin_ctrl">
   <span> Number of Bins:&emsp;</span>
   <input type="text" id="bin_num" name="peakNumber" ng-model="binNumber" ng:validate="integer:0" value="10" disabled="true"/>&emsp;&emsp;
   <button class="btn btn-info btn-sm" id="update_btn" disabled="true"> update </button>
+  <button class="btn btn-success btn-sm" id="download_btn">Download SVG</button>
 </div>
 
 
-<div id="linechart" style="padding-bottom: 5px"></div>
+<svg id="linechart" style="padding-bottom: 5px"></svg>
 <div class="col-md-5">
   <div id="UCSClink"></div>
 </div>
@@ -225,6 +227,14 @@
       $('#position_table').empty()
       update_chart();
     })
+
+    $("#download_btn").on("click", function() {
+      var e = document.createElement('script'); 
+      e.setAttribute('src', 'js/svg-crowbar-1.js'); 
+      e.setAttribute('class', 'svg-crowbar'); 
+      document.body.appendChild(e);
+    })
+
     
     $("#localdrive_btn_wrapper").click(function() {
       $("#selectfile_local").trigger('click');
