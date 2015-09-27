@@ -1,4 +1,4 @@
-Biological data visualizations
+Bioinformatics data visualization tools
 ==================
 - All visualizations are written in Javascript with D3.js.
 
